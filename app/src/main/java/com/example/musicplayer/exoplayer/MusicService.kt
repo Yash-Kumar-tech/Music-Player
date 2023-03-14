@@ -7,7 +7,6 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
 import com.example.musicplayer.exoplayer.callbacks.MusicPlaybackPreparer
 import com.example.musicplayer.exoplayer.callbacks.MusicPlayerEventListener
@@ -15,7 +14,6 @@ import com.example.musicplayer.exoplayer.callbacks.MusicPlayerNotificationListen
 import com.example.musicplayer.util.Constants.MEDIA_ROOT_ID
 import com.example.musicplayer.util.Constants.NETWORK_ERROR
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator
@@ -91,6 +89,9 @@ class MusicService: MediaBrowserServiceCompat() {
 
         val musicPlaybackPreparer = MusicPlaybackPreparer(firebaseMusicSource) {
             curPlayingSong = it
+            firebaseMusicSource.songs.sortedBy { song ->
+                song.description.title.toString()
+            }
             preparePlayer(
                 firebaseMusicSource.songs,
                 it,

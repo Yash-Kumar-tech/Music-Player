@@ -1,11 +1,9 @@
 package com.example.musicplayer.data.remote
 
-import android.util.Log
 import com.example.musicplayer.data.entities.Song
 import com.example.musicplayer.util.Constants.SONG_COLLECTION
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 class MusicDatabase {
 
@@ -14,7 +12,9 @@ class MusicDatabase {
 
     suspend fun getAllSongs(): List<Song> {
         return try {
-            songCollection.get().await().toObjects(Song::class.java)
+            songCollection.get().await().toObjects(Song::class.java).sortedBy {
+                it.title
+            }
         } catch(e: Exception) {
             emptyList()
         }
